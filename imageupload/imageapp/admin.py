@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import UserTier
 
-# Register your models here.
+
+@admin.register(UserTier)
+class UserTierAdmin(admin.ModelAdmin):
+    list_display = ("user", "tier")
