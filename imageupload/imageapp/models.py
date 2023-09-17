@@ -2,15 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class UserTier(models.Model):
+class Tier(models.Model):
     name = models.CharField(max_length=255, default="Basic")
     thumbnail_sizes = models.JSONField(default=dict)
     original_link_enabled = models.BooleanField(default=False)
     expiring_link_enabled = models.BooleanField(default=False)
-    users = models.ManyToManyField(User, related_name="user_tier", blank=True)
 
     def __str__(self):
         return self.name
+
+
+class UserTier(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    tier = models.ForeignKey(Tier, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"User: {self.user.username} - Tier: {self.tier}"
 
 
 class Image(models.Model):
