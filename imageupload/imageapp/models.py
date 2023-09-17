@@ -1,19 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-TIER_TYPES = [
-    ("Basic", "Basic"),
-    ("Premium", "Premium"),
-    ("Enterprise", "Enterprise"),
-]
-
 
 class UserTier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tier = models.CharField(max_length=30, choices=TIER_TYPES)
+    name = models.CharField(max_length=255, default="Basic")
+    thumbnail_sizes = models.JSONField(default=dict)
+    original_link_enabled = models.BooleanField(default=False)
+    expiring_link_enabled = models.BooleanField(default=False)
+    users = models.ManyToManyField(User, related_name="user_tier", blank=True)
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 
 class Image(models.Model):
