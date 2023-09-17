@@ -77,7 +77,7 @@ WSGI_APPLICATION = "imageupload.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": config("POSTGRES_DB"),
         "HOST": config("POSTGRES_HOST"),
@@ -86,7 +86,6 @@ DATABASES = {
         "PORT": config("POSTGRES_PORT"),
     }
 }
-
 
 
 # Password validation
