@@ -16,10 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from imageapp.views import ImageListCreateView, ImageRetrieveUpdateDestroyView
+from django.conf.urls.static import static
+from django.conf import settings
+from imageapp.views import (
+    ImageListView,
+    ImageCreateView,
+    ImageRetrieveUpdateDestroyView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("images/", ImageListCreateView.as_view()),
+    path("images/", ImageListView.as_view()),
+    path("images/create", ImageCreateView.as_view()),
     path("delete_images/<int:pk>/", ImageRetrieveUpdateDestroyView.as_view()),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

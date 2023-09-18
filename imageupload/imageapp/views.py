@@ -4,12 +4,17 @@ from .models import Image, UserTier
 from .serializers import ImageSerializer
 
 
-class ImageListCreateView(generics.ListCreateAPIView):
+class ImageCreateView(generics.CreateAPIView):
     serializer_class = ImageSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class ImageListView(generics.ListAPIView):
+    serializer_class = ImageSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user

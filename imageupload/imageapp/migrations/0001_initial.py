@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("image", models.ImageField(upload_to="images/")),
+                ("image", models.ImageField(upload_to="media/")),
                 ("uploaded", models.DateTimeField(auto_now_add=True)),
                 ("is_thumbnail_generated", models.BooleanField(default=False)),
                 ("is_expiring_link_enabled", models.BooleanField(default=False)),
