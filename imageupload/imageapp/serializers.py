@@ -20,3 +20,8 @@ class ImageSerializer(serializers.ModelSerializer):
             "is_expiring_link_enabled",
             "expiration_seconds",
         )
+
+        def get_photo_url(self, obj):
+            request = self.context.get("request")
+            photo_url = obj.fingerprint.url
+            return request.build_absolute_url(photo_url)
