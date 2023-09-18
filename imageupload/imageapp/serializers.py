@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import UserTier, Image
+from versatileimagefield.serializers import VersatileImageFieldSerializer
 
 
 class UserTierSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,6 +10,8 @@ class UserTierSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    image = VersatileImageFieldSerializer(sizes="sizes")
+
     class Meta:
         model = Image
         fields = (

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from versatileimagefield.fields import VersatileImageField
 
 
 class Tier(models.Model):
@@ -22,7 +23,7 @@ class UserTier(models.Model):
 
 class Image(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="images/")
+    image = VersatileImageField(upload_to="images/")
     uploaded = models.DateTimeField(auto_now_add=True)
     is_thumbnail_generated = models.BooleanField(default=False)
     is_expiring_link_enabled = models.BooleanField(default=False)
