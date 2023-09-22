@@ -1,7 +1,9 @@
 from rest_framework import generics, permissions
-from django.contrib.auth.models import User
-from .models import Image, UserTier
+from .models import Image
+from django.conf import settings
 from .serializers import ImageSerializer
+
+User = settings.AUTH_USER_MODEL
 
 
 class ImageCreateView(generics.CreateAPIView):

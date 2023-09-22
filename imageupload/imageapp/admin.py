@@ -1,13 +1,5 @@
 from django.contrib import admin
-from .models import UserTier, Image, Tier, ThumbnailSizes
-
-
-@admin.register(UserTier)
-class UserTierAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "tier",
-    )
+from .models import Image, Tier, ThumbnailSizes
 
 
 @admin.register(Tier)

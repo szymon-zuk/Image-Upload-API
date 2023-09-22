@@ -59,17 +59,17 @@ class Image(models.Model):
     def get_original_url(self):
         return self.image.url
 
-    def get_all_images(self):
+    def get_thumbnail_links(self):
         tier = self.user.tier
-        available_thumbnail_sizes = tier.get_available_heights()
-        original_image = self.image.name
+        thumbnail_links = {}
 
-        thumbnails = []
-        for height in available_thumbnail_sizes:
-            thumbnail_name = f"{os.path.splitext(original_image)[0]}_{height}.jpg"
-            thumbnails.append(thumbnail_name)
+        for thumbnail_size in tier.thumbnail_sizes.all():
+            size_key = f"{thumbnail_size.width}px_height"
+            thumbnail_links[size_key] = self.image.crop[
+                thumbnail_size.width, thumbnail_size.height
+            ].url
 
         if tier.original_link_enabled:
-            thumbnails.append(self.get_original_url)
+            thumbnail_links["original"] = self.image.url
 
-        return thumbnail_name
+        return thumbnail_links
