@@ -17,8 +17,7 @@ class ImageListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return Image.objects.filter(user=user)
+        return Image.objects.filter(user=self.request.user)
 
 
 class ImageRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -26,5 +25,4 @@ class ImageRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return Image.objects.filter(user=user)
+        return Image.objects.filter(user=self.request.user)

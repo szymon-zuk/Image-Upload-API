@@ -131,11 +131,3 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
-    "sizes": [
-        ("full_size", "url"),
-        ("thumbnail_200", "thumbnail__200x200"),
-        ("thumbnail_400", "thumbnail__400x400"),
-    ]
-}

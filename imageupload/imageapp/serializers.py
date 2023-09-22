@@ -10,7 +10,13 @@ class UserTierSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    image = VersatileImageFieldSerializer(sizes="sizes")
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ("full_size", "url"),
+            ("thumbnail_200", "thumbnail__200x200"),
+            ("thumbnail_400", "thumbnail__400x400"),
+        ]
+    )
 
     class Meta:
         model = Image
@@ -18,9 +24,6 @@ class ImageSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "image",
-            "uploaded",
-            "is_thumbnail_generated",
-            "is_expiring_link_enabled",
             "expiration_seconds",
         )
 
@@ -28,3 +31,11 @@ class ImageSerializer(serializers.ModelSerializer):
             request = self.context.get("request")
             photo_url = obj.fingerprint.url
             return request.build_absolute_url(photo_url)
+
+        def get_image(self, obj):
+            thumbnails = obj.get_all_images()
+            thumbnails_to_return = []
+            for thumbnail in thumbnails:
+                thumbnails_to_return.append(thumbnail)
+
+            return thumbnails_to_return
