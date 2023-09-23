@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from imageapp.models import Tier, ThumbnailSizes
+from users.models import Tier, ThumbnailSizes
 
 
 class Command(BaseCommand):
@@ -31,7 +31,8 @@ class Command(BaseCommand):
             original_link_enabled=True,
             expiring_link_enabled=True,
         )
-        enterprise_tier.thumbnail_sizes.add(thumbnail_sizes_200px, thumbnail_sizes_400px)
+        enterprise_tier.thumbnail_sizes.add(
+            thumbnail_sizes_200px, thumbnail_sizes_400px
+        )
 
         self.stdout.write(self.style.SUCCESS("Built-in tiers created successfully"))
-
