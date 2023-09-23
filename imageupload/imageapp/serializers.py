@@ -1,8 +1,9 @@
 import os
+
+from django.utils.crypto import get_random_string
 from rest_framework import serializers
 from .models import Image, ExpiringLink
 from versatileimagefield.serializers import VersatileImageFieldSerializer
-from .utils import generate_expiring_link
 
 
 class ImageListSerializer(serializers.ModelSerializer):
@@ -29,17 +30,25 @@ class ImageCreateSerializer(serializers.ModelSerializer):
         fields = ("image",)
 
 
-class ExpiringLinkSerializer(serializers.ModelSerializer):
+class ExpiringLinkCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpiringLink
         fields = ("image", "expiration_time")
 
     def create(self, validated_data):
         image = validated_data.get("image")
-        expiration_time = validated_data.get("expiration_time")
+        expiration_seconds = validated_data.get("expiration_time")
+        link_identifier = get_random_string(length=32)
+        link = f"/expiring/{link_identifier}"
 
-        expiring_link = generate_expiring_link(image, expiration_time)
-        validated_data["link"] = expiring_link
-        expiring_link_instance = ExpiringLink.objects.create(**validated_data)
+        expiring_link_instance = ExpiringLink.objects.create(
+            image=image, expiration_time=expiration_seconds, link=link
+        )
 
         return expiring_link_instance
+
+
+class ExpiringLinkListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpiringLink
+        fields = ("link",)

@@ -4,7 +4,8 @@ from django.conf import settings
 from .serializers import (
     ImageListSerializer,
     ImageCreateSerializer,
-    ExpiringLinkSerializer,
+    ExpiringLinkCreateSerializer,
+    ExpiringLinkListSerializer,
 )
 
 User = settings.AUTH_USER_MODEL
@@ -34,6 +35,11 @@ class ImageRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         return Image.objects.filter(user=self.request.user)
 
 
-class ExpiringLinkCreateView(generics.CreateAPIView):
-    queryset = ExpiringLink.objects.all()
-    serializer_class = ExpiringLinkSerializer
+class ExpiringLinkView(generics.ListCreateAPIView):
+    def get_queryset(self):
+        return ExpiringLink.objects.filter(image__user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return ExpiringLinkCreateSerializer
+        return ExpiringLinkListSerializer
