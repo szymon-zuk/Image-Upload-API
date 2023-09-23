@@ -8,6 +8,9 @@ class UserAccountTier(AbstractUser):
         "Tier", on_delete=models.SET_NULL, null=True, related_name="tier"
     )
 
+    def __str__(self):
+        return f"User: {self.username} Tier: {self.tier}"
+
 
 class Tier(models.Model):
     name = models.CharField(max_length=255, default="Basic")
