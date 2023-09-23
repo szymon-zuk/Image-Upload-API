@@ -2,7 +2,6 @@ import os.path
 from django.conf import settings
 from django.db import models
 from versatileimagefield.fields import VersatileImageField
-from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 
 User = settings.AUTH_USER_MODEL
