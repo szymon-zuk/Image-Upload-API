@@ -27,8 +27,8 @@ from imageapp.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("images/list", ImageListView.as_view()),
-    path("images/create", ImageCreateView.as_view()),
+    path("images/list", ImageListView.as_view(), name="image-list"),
+    path("images/create", ImageCreateView.as_view(), name="create-image"),
     path("delete_images/<int:pk>/", ImageRetrieveUpdateDestroyView.as_view()),
     path("expiring-links/", ExpiringLinkView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
