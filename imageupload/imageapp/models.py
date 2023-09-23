@@ -1,8 +1,9 @@
 import os.path
-
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from versatileimagefield.fields import VersatileImageField
+
+User = settings.AUTH_USER_MODEL
 
 
 class ThumbnailSizes(models.Model):
@@ -11,33 +12,6 @@ class ThumbnailSizes(models.Model):
 
     def __str__(self):
         return f"{self.width}x{self.height}"
-
-
-class Tier(models.Model):
-    name = models.CharField(max_length=255, default="Basic")
-    thumbnail_sizes = models.ManyToManyField(ThumbnailSizes, blank=True)
-    original_link_enabled = models.BooleanField(default=False)
-    expiring_link_enabled = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def get_thumbnail_sizes(self):
-        return self.thumbnail_sizes.all()
-
-    @property
-    def get_available_heights(self):
-        thumbnails = self.get_thumbnail_sizes
-        return [thumbnail.height for thumbnail in thumbnails]
-
-
-class UserTier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    tier = models.ForeignKey(Tier, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return f"User: {self.user.username} - Tier: {self.tier}"
 
 
 class Image(models.Model):
