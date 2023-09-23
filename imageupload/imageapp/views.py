@@ -1,7 +1,11 @@
 from rest_framework import generics, permissions
-from .models import Image
+from .models import Image, ExpiringLink
 from django.conf import settings
-from .serializers import ImageListSerializer, ImageCreateSerializer
+from .serializers import (
+    ImageListSerializer,
+    ImageCreateSerializer,
+    ExpiringLinkSerializer,
+)
 
 User = settings.AUTH_USER_MODEL
 
@@ -28,3 +32,8 @@ class ImageRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Image.objects.filter(user=self.request.user)
+
+
+class ExpiringLinkCreateView(generics.CreateAPIView):
+    queryset = ExpiringLink.objects.all()
+    serializer_class = ExpiringLinkSerializer
