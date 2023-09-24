@@ -1,5 +1,5 @@
 import os
-
+from django.core import signing
 from django.utils.crypto import get_random_string
 from rest_framework import serializers
 from .models import Image, ExpiringLink
@@ -33,19 +33,7 @@ class ImageCreateSerializer(serializers.ModelSerializer):
 class ExpiringLinkCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpiringLink
-        fields = ("image", "expiration_time")
-
-    def create(self, validated_data):
-        image = validated_data.get("image")
-        expiration_seconds = validated_data.get("expiration_time")
-        link_identifier = get_random_string(length=32)
-        link = f"/expiring/{link_identifier}"
-
-        expiring_link_instance = ExpiringLink.objects.create(
-            image=image, expiration_time=expiration_seconds, link=link
-        )
-
-        return expiring_link_instance
+        fields = ["image", "expiration_time"]
 
 
 class ExpiringLinkListSerializer(serializers.ModelSerializer):

@@ -22,7 +22,8 @@ from imageapp.views import (
     ImageListView,
     ImageCreateView,
     ImageRetrieveUpdateDestroyView,
-    ExpiringLinkView,
+    ExpiringLinkListCreateView,
+    ExpiringLinkDetailsView,
 )
 
 urlpatterns = [
@@ -30,5 +31,10 @@ urlpatterns = [
     path("images/list", ImageListView.as_view(), name="image-list"),
     path("images/create", ImageCreateView.as_view(), name="create-image"),
     path("delete_images/<int:pk>/", ImageRetrieveUpdateDestroyView.as_view()),
-    path("expiring-links/", ExpiringLinkView.as_view()),
+    path("expiring-links/", ExpiringLinkListCreateView.as_view(), name="expiring-link"),
+    path(
+        "expiring-link/<str:signed_link>/",
+        ExpiringLinkDetailsView.as_view(),
+        name="expiring-link-detail",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
