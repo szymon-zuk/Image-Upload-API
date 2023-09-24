@@ -22,11 +22,19 @@ from imageapp.views import (
     ImageListView,
     ImageCreateView,
     ImageRetrieveUpdateDestroyView,
+    ExpiringLinkListCreateView,
+    ExpiringLinkDetailsView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("images/list", ImageListView.as_view()),
-    path("images/create", ImageCreateView.as_view()),
+    path("images/list", ImageListView.as_view(), name="image-list"),
+    path("images/create", ImageCreateView.as_view(), name="create-image"),
     path("delete_images/<int:pk>/", ImageRetrieveUpdateDestroyView.as_view()),
+    path("expiring-links/", ExpiringLinkListCreateView.as_view(), name="expiring-link"),
+    path(
+        "expiring-link/<str:signed_link>/",
+        ExpiringLinkDetailsView.as_view(),
+        name="expiring-link-detail",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

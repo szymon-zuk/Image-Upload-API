@@ -1,7 +1,9 @@
 import os.path
+import time
 from django.conf import settings
 from django.db import models
 from versatileimagefield.fields import VersatileImageField
+from django.utils.crypto import get_random_string
 
 
 User = settings.AUTH_USER_MODEL
@@ -70,3 +72,18 @@ class Image(models.Model):
                 thumbnail_links["original_image"] = self.image.url
 
             return thumbnail_links
+
+
+class ExpiringLink(models.Model):
+    image = models.OneToOneField(
+        Image, on_delete=models.CASCADE, related_name="expiring_link", unique=True
+    )
+    expiration_time = models.PositiveIntegerField()
+    link = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.link} - {self.image}"
+
+    def is_link_expired(self):
+        current_time = int(time.time())
+        return True if current_time > self.expiration_time else False
