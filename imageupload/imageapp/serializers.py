@@ -1,27 +1,42 @@
+import os
+from django.core import signing
+from django.utils.crypto import get_random_string
 from rest_framework import serializers
-from .models import UserTier, Image
+from .models import Image, ExpiringLink
+from versatileimagefield.serializers import VersatileImageFieldSerializer
 
 
-class UserTierSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = UserTier
-        fields = ("url", "id", "user", "tier")
+class ImageListSerializer(serializers.ModelSerializer):
+    image_links = serializers.SerializerMethodField()
 
-
-class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = (
             "id",
-            "user",
-            "image",
-            "uploaded",
-            "is_thumbnail_generated",
-            "is_expiring_link_enabled",
-            "expiration_seconds",
+            "image_links",
         )
 
-        def get_photo_url(self, obj):
-            request = self.context.get("request")
-            photo_url = obj.fingerprint.url
-            return request.build_absolute_url(photo_url)
+    def get_image_links(self, obj):
+        base_url = "http://127.0.0.1:8000/"
+        thumbnail_links = {}
+        for key, thumbnail_url in obj.get_thumbnail_links().items():
+            thumbnail_links[key] = f"{base_url}{thumbnail_url}"
+        return thumbnail_links
+
+
+class ImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ("image",)
+
+
+class ExpiringLinkCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpiringLink
+        fields = ["image", "expiration_time"]
+
+
+class ExpiringLinkListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpiringLink
+        fields = ("link",)
